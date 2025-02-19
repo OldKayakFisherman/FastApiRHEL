@@ -1,0 +1,28 @@
+[Unit]
+Description=FastAPI hosted application
+After=network.target
+
+[Service]
+# User and group for running the service
+User=root
+Group=root
+
+# Working directory of your FastAPI project
+WorkingDirectory=/path/to/fastapi/app
+
+# Activate the virtual environment
+Environment="PATH=/path/to/venv/bin"
+
+# Start the FastAPI application with Uvicorn
+ExecStart=/path/to/venv/bin/uvicorn api:app --host 0.0.0.0 --port 1234 --workers 9
+
+# Graceful reload and stop commands
+ExecReload=/bin/kill -s HUP $MAINPID
+ExecStop=/bin/kill -s TERM $MAINPID
+
+# Restart policy and security
+Restart=always
+PrivateTmp=true
+
+[Install]
+WantedBy=multi-user.target
